@@ -2,12 +2,23 @@
   
     
   
+    
+        "post1": {
+            "title": "Title",
+            "content": "Aim of this notebook is to show how we can generate artificial random data and interact with it using interaction widgets in python . 1. Linear random data . import numpy as np import matplotlib.pyplot as plt from matplotlib import rcParams rcParams[&#39;figure.figsize&#39;] = (10, 5) # Change this if figures look ugly. from matplotlib import rcParams # IPython libraries from ipywidgets import interactive from IPython.display import display . training_points = 250 # Number of training points noise = 0.1 # Noise level def generate_linear_data(training_points,noise): # generate random data-set np.random.seed(0) x = np.random.rand(training_points, 1) m = 3 # Slope c = 1 # Intercept y = c + m * x + np.random.rand(training_points,1) * noise # y = mx + c + noise # plot plt.scatter(x,y,s=25, marker = &quot;o&quot;) plt.xlabel(&#39;x&#39;) plt.ylabel(&#39;y&#39;) plt.title(&quot;Generated data&quot;) plt.show() return (x,y) # This will call the interactive widget with the data generating function, which also plots the data real-time l=interactive(generate_linear_data,training_points={&#39;50 samples&#39;:50,&#39;200 samples&#39;:200},noise =(0,1,0.2)) display(l) . 2. Polynomial random data . x_min = -5 x_max = 5 noise = 0.1 def generate_poly_data(training_points,x_min,x_max,noise): x1 = np.linspace(x_min,x_max,training_points*5) x = np.random.choice(x1,size=training_points) y = np.sin(x) + noise*np.random.normal(size=training_points) plt.scatter(x,y,edgecolors=&#39;k&#39;,c=&#39;red&#39;,s=60) plt.grid(True) plt.show() return (x,y) # This will call the interactive widget with the data generating function, which also plots the data real-time p=interactive(generate_poly_data,training_points={&#39;50 samples&#39;:50,&#39;200 samples&#39;:200},noise =(0,1,0.2),x_min=(-5,0,1), x_max=(0,5,1)) display(p) .",
+            "url": "https://aizardar.github.io/blogs/2020/07/05/random-data-generation-interactive.html",
+            "relUrl": "/2020/07/05/random-data-generation-interactive.html",
+            "date": " • Jul 5, 2020"
+        }
+        
+    
+  
 
   
   
 
   
-      "page1": {
+      ,"page1": {
           "title": "About Me",
           "content": "Hey ! I am currently a PhD student in the Materials Theory group at ETH Zuerich. My research focuses on using quantum-mechanical simulations and data analytics to investigate magnetic properties of materials. I am also a machine learning enthusiast with a keen interest in computer vision. To know more about me, please visit my website. .",
           "url": "https://aizardar.github.io/blogs/about/",
