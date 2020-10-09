@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Simple Neural Network | Izardar’s blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Simple Neural Network" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Simple neural network to predict the function f(x) = 10*x" />
+<meta property="og:description" content="Simple neural network to predict the function f(x) = 10*x" />
+<link rel="canonical" href="https://aizardar.github.io/blogs/neural%20networks/keras/linear%20regression/2020/10/09/hello-world-neural-networks.html" />
+<meta property="og:url" content="https://aizardar.github.io/blogs/neural%20networks/keras/linear%20regression/2020/10/09/hello-world-neural-networks.html" />
+<meta property="og:site_name" content="Izardar’s blog" />
+<meta property="og:image" content="https://aizardar.github.io/blogs/images/some_folder/your_image.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Simple neural network to predict the function f(x) = 10*x","@type":"BlogPosting","headline":"Simple Neural Network","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","url":"https://aizardar.github.io/blogs/neural%20networks/keras/linear%20regression/2020/10/09/hello-world-neural-networks.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://aizardar.github.io/blogs/neural%20networks/keras/linear%20regression/2020/10/09/hello-world-neural-networks.html"},"image":"https://aizardar.github.io/blogs/images/some_folder/your_image.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://aizardar.github.io/blogs/feed.xml" title="Izardar's blog" /><link rel="shortcut icon" type="image/x-icon" href="/blogs/images/favicon.ico"><link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blogs/">Izardar&#39;s blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blogs/about/">About Me</a><a class="page-link" href="/blogs/search/">Search</a><a class="page-link" href="/blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Simple Neural Network</h1><p class="page-description">Simple neural network to predict the function f(x) = 10*x</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-09T00:00:00-05:00" itemprop="datePublished">
+        Oct 9, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      29 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blogs/categories/#neural networks">neural networks</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blogs/categories/#keras">keras</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blogs/categories/#linear regression">linear regression</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/aizardar/blogs/tree/master/_notebooks/2020-10-09-hello-world-neural-networks.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blogs/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/aizardar/blogs/master?filepath=_notebooks%2F2020-10-09-hello-world-neural-networks.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blogs/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/aizardar/blogs/blob/master/_notebooks/2020-10-09-hello-world-neural-networks.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blogs/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-09-hello-world-neural-networks.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="In-this-notebook,-we-will-use-a-very-simple-neural-network-to-make-predictions.-We-will-see-if-our-simple-neural-network-can-predict-the-function-f(x)-=-10*x.">In this notebook, we will use a very simple neural network to make predictions. We will see if our simple neural network can predict the function f(x) = 10*x.<a class="anchor-link" href="#In-this-notebook,-we-will-use-a-very-simple-neural-network-to-make-predictions.-We-will-see-if-our-simple-neural-network-can-predict-the-function-f(x)-=-10*x."> </a></h3><h4 id="This-notebook-is-motivated-from-one-of-the-videos-on-Machine-Learning-Foundations-by-Google-Developers.">This notebook is motivated from one of the <a href="http://www.youtube.com/watch?v=_Z9TRANg4c0">videos</a> on Machine Learning Foundations by Google Developers.<a class="anchor-link" href="#This-notebook-is-motivated-from-one-of-the-videos-on-Machine-Learning-Foundations-by-Google-Developers."> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-start-by-importing-some-useful-libraries">Let's start by importing some useful libraries<a class="anchor-link" href="#Let's-start-by-importing-some-useful-libraries"> </a></h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span> <span class="c1"># We use keras API to define our model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-now-create-the-simplest-possible-neural-network-i.e.,-with-1-layer-and-1-neuron">Let's now create the simplest possible neural network i.e., with 1 layer and 1 neuron<a class="anchor-link" href="#Let's-now-create-the-simplest-possible-neural-network-i.e.,-with-1-layer-and-1-neuron"> </a></h4><blockquote>
+</blockquote>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">input_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">])])</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-compile-our-model-by-specifying-an-optimizer-and-loss-function">Let's compile our model by specifying an optimizer and loss function<a class="anchor-link" href="#Let's-compile-our-model-by-specifying-an-optimizer-and-loss-function"> </a></h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span> <span class="o">=</span> <span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="s1">&#39;mean_squared_error&#39;</span><span class="p">)</span> <span class="c1"># &#39;sgd&#39; stands for stochastic gradient descent</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Time to provide the data to our NN</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="In-the-above-cell,-you-can-already-guess-the-function-by-looking-at-the-x-and-y-values.">In the above cell, you can already guess the function by looking at the x and y values.<a class="anchor-link" href="#In-the-above-cell,-you-can-already-guess-the-function-by-looking-at-the-x-and-y-values."> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-train-our-neural-network...">Let's train our neural network...<a class="anchor-link" href="#Let's-train-our-neural-network..."> </a></h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Training the NN</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train on 12 samples
+Epoch 1/500
+12/12 [==============================] - 0s 28ms/sample - loss: 4246.3638
+Epoch 2/500
+12/12 [==============================] - 0s 201us/sample - loss: 503.1161
+Epoch 3/500
+12/12 [==============================] - 0s 214us/sample - loss: 60.3177
+Epoch 4/500
+12/12 [==============================] - 0s 172us/sample - loss: 7.9278
+Epoch 5/500
+12/12 [==============================] - 0s 157us/sample - loss: 1.7191
+Epoch 6/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.9734
+Epoch 7/500
+12/12 [==============================] - 0s 176us/sample - loss: 0.8740
+Epoch 8/500
+12/12 [==============================] - 0s 153us/sample - loss: 0.8513
+Epoch 9/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.8378
+Epoch 10/500
+12/12 [==============================] - 0s 176us/sample - loss: 0.8255
+Epoch 11/500
+12/12 [==============================] - 0s 155us/sample - loss: 0.8135
+Epoch 12/500
+12/12 [==============================] - 0s 170us/sample - loss: 0.8018
+Epoch 13/500
+12/12 [==============================] - 0s 152us/sample - loss: 0.7902
+Epoch 14/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.7787
+Epoch 15/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.7674
+Epoch 16/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.7563
+Epoch 17/500
+12/12 [==============================] - 0s 191us/sample - loss: 0.7454
+Epoch 18/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.7346
+Epoch 19/500
+12/12 [==============================] - 0s 114us/sample - loss: 0.7240
+Epoch 20/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.7135
+Epoch 21/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.7031
+Epoch 22/500
+12/12 [==============================] - 0s 203us/sample - loss: 0.6930
+Epoch 23/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.6829
+Epoch 24/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.6730
+Epoch 25/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.6633
+Epoch 26/500
+12/12 [==============================] - 0s 113us/sample - loss: 0.6537
+Epoch 27/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.6442
+Epoch 28/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.6349
+Epoch 29/500
+12/12 [==============================] - 0s 126us/sample - loss: 0.6257
+Epoch 30/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.6166
+Epoch 31/500
+12/12 [==============================] - 0s 149us/sample - loss: 0.6077
+Epoch 32/500
+12/12 [==============================] - 0s 126us/sample - loss: 0.5989
+Epoch 33/500
+12/12 [==============================] - 0s 137us/sample - loss: 0.5902
+Epoch 34/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.5817
+Epoch 35/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.5733
+Epoch 36/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.5650
+Epoch 37/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.5568
+Epoch 38/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.5487
+Epoch 39/500
+12/12 [==============================] - 0s 122us/sample - loss: 0.5408
+Epoch 40/500
+12/12 [==============================] - 0s 124us/sample - loss: 0.5330
+Epoch 41/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.5252
+Epoch 42/500
+12/12 [==============================] - 0s 275us/sample - loss: 0.5176
+Epoch 43/500
+12/12 [==============================] - 0s 113us/sample - loss: 0.5102
+Epoch 44/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.5028
+Epoch 45/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.4955
+Epoch 46/500
+12/12 [==============================] - 0s 173us/sample - loss: 0.4883
+Epoch 47/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.4812
+Epoch 48/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.4743
+Epoch 49/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.4674
+Epoch 50/500
+12/12 [==============================] - 0s 136us/sample - loss: 0.4606
+Epoch 51/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.4540
+Epoch 52/500
+12/12 [==============================] - 0s 115us/sample - loss: 0.4474
+Epoch 53/500
+12/12 [==============================] - 0s 106us/sample - loss: 0.4409
+Epoch 54/500
+12/12 [==============================] - 0s 164us/sample - loss: 0.4345
+Epoch 55/500
+12/12 [==============================] - 0s 167us/sample - loss: 0.4282
+Epoch 56/500
+12/12 [==============================] - 0s 114us/sample - loss: 0.4220
+Epoch 57/500
+12/12 [==============================] - 0s 230us/sample - loss: 0.4159
+Epoch 58/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.4099
+Epoch 59/500
+12/12 [==============================] - 0s 155us/sample - loss: 0.4040
+Epoch 60/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.3981
+Epoch 61/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.3924
+Epoch 62/500
+12/12 [==============================] - 0s 225us/sample - loss: 0.3867
+Epoch 63/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.3811
+Epoch 64/500
+12/12 [==============================] - 0s 108us/sample - loss: 0.3756
+Epoch 65/500
+12/12 [==============================] - 0s 115us/sample - loss: 0.3701
+Epoch 66/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.3648
+Epoch 67/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.3595
+Epoch 68/500
+12/12 [==============================] - 0s 240us/sample - loss: 0.3543
+Epoch 69/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.3492
+Epoch 70/500
+12/12 [==============================] - 0s 109us/sample - loss: 0.3441
+Epoch 71/500
+12/12 [==============================] - 0s 108us/sample - loss: 0.3391
+Epoch 72/500
+12/12 [==============================] - 0s 209us/sample - loss: 0.3342
+Epoch 73/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.3294
+Epoch 74/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.3246
+Epoch 75/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.3199
+Epoch 76/500
+12/12 [==============================] - 0s 115us/sample - loss: 0.3153
+Epoch 77/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.3107
+Epoch 78/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.3062
+Epoch 79/500
+12/12 [==============================] - 0s 227us/sample - loss: 0.3018
+Epoch 80/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.2974
+Epoch 81/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.2931
+Epoch 82/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.2889
+Epoch 83/500
+12/12 [==============================] - 0s 145us/sample - loss: 0.2847
+Epoch 84/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.2806
+Epoch 85/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.2765
+Epoch 86/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.2725
+Epoch 87/500
+12/12 [==============================] - 0s 146us/sample - loss: 0.2685
+Epoch 88/500
+12/12 [==============================] - 0s 151us/sample - loss: 0.2647
+Epoch 89/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.2608
+Epoch 90/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.2570
+Epoch 91/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.2533
+Epoch 92/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.2497
+Epoch 93/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.2460
+Epoch 94/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.2425
+Epoch 95/500
+12/12 [==============================] - 0s 181us/sample - loss: 0.2390
+Epoch 96/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.2355
+Epoch 97/500
+12/12 [==============================] - 0s 172us/sample - loss: 0.2321
+Epoch 98/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.2287
+Epoch 99/500
+12/12 [==============================] - 0s 180us/sample - loss: 0.2254
+Epoch 100/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.2222
+Epoch 101/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.2189
+Epoch 102/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.2158
+Epoch 103/500
+12/12 [==============================] - 0s 265us/sample - loss: 0.2127
+Epoch 104/500
+12/12 [==============================] - 0s 191us/sample - loss: 0.2096
+Epoch 105/500
+12/12 [==============================] - 0s 227us/sample - loss: 0.2065
+Epoch 106/500
+12/12 [==============================] - 0s 197us/sample - loss: 0.2036
+Epoch 107/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.2006
+Epoch 108/500
+12/12 [==============================] - 0s 235us/sample - loss: 0.1977
+Epoch 109/500
+12/12 [==============================] - 0s 143us/sample - loss: 0.1948
+Epoch 110/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.1920
+Epoch 111/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.1892
+Epoch 112/500
+12/12 [==============================] - 0s 174us/sample - loss: 0.1865
+Epoch 113/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.1838
+Epoch 114/500
+12/12 [==============================] - 0s 134us/sample - loss: 0.1811
+Epoch 115/500
+12/12 [==============================] - 0s 172us/sample - loss: 0.1785
+Epoch 116/500
+12/12 [==============================] - 0s 231us/sample - loss: 0.1759
+Epoch 117/500
+12/12 [==============================] - 0s 271us/sample - loss: 0.1734
+Epoch 118/500
+12/12 [==============================] - 0s 171us/sample - loss: 0.1709
+Epoch 119/500
+12/12 [==============================] - 0s 163us/sample - loss: 0.1684
+Epoch 120/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.1660
+Epoch 121/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.1636
+Epoch 122/500
+12/12 [==============================] - 0s 166us/sample - loss: 0.1612
+Epoch 123/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.1589
+Epoch 124/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.1566
+Epoch 125/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.1543
+Epoch 126/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.1521
+Epoch 127/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.1499
+Epoch 128/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.1477
+Epoch 129/500
+12/12 [==============================] - 0s 171us/sample - loss: 0.1455
+Epoch 130/500
+12/12 [==============================] - 0s 165us/sample - loss: 0.1434
+Epoch 131/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.1414
+Epoch 132/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.1393
+Epoch 133/500
+12/12 [==============================] - 0s 224us/sample - loss: 0.1373
+Epoch 134/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.1353
+Epoch 135/500
+12/12 [==============================] - 0s 150us/sample - loss: 0.1333
+Epoch 136/500
+12/12 [==============================] - 0s 194us/sample - loss: 0.1314
+Epoch 137/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.1295
+Epoch 138/500
+12/12 [==============================] - 0s 210us/sample - loss: 0.1276
+Epoch 139/500
+12/12 [==============================] - 0s 153us/sample - loss: 0.1258
+Epoch 140/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.1240
+Epoch 141/500
+12/12 [==============================] - 0s 126us/sample - loss: 0.1222
+Epoch 142/500
+12/12 [==============================] - 0s 146us/sample - loss: 0.1204
+Epoch 143/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.1187
+Epoch 144/500
+12/12 [==============================] - 0s 190us/sample - loss: 0.1169
+Epoch 145/500
+12/12 [==============================] - 0s 146us/sample - loss: 0.1153
+Epoch 146/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.1136
+Epoch 147/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.1119
+Epoch 148/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.1103
+Epoch 149/500
+12/12 [==============================] - 0s 124us/sample - loss: 0.1087
+Epoch 150/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.1071
+Epoch 151/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.1056
+Epoch 152/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.1041
+Epoch 153/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.1026
+Epoch 154/500
+12/12 [==============================] - 0s 206us/sample - loss: 0.1011
+Epoch 155/500
+12/12 [==============================] - 0s 151us/sample - loss: 0.0996
+Epoch 156/500
+12/12 [==============================] - 0s 167us/sample - loss: 0.0982
+Epoch 157/500
+12/12 [==============================] - 0s 161us/sample - loss: 0.0967
+Epoch 158/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0953
+Epoch 159/500
+12/12 [==============================] - 0s 163us/sample - loss: 0.0940
+Epoch 160/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0926
+Epoch 161/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.0913
+Epoch 162/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.0899
+Epoch 163/500
+12/12 [==============================] - 0s 174us/sample - loss: 0.0886
+Epoch 164/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0874
+Epoch 165/500
+12/12 [==============================] - 0s 116us/sample - loss: 0.0861
+Epoch 166/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.0848
+Epoch 167/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.0836
+Epoch 168/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.0824
+Epoch 169/500
+12/12 [==============================] - 0s 114us/sample - loss: 0.0812
+Epoch 170/500
+12/12 [==============================] - 0s 104us/sample - loss: 0.0800
+Epoch 171/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.0789
+Epoch 172/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.0777
+Epoch 173/500
+12/12 [==============================] - 0s 221us/sample - loss: 0.0766
+Epoch 174/500
+12/12 [==============================] - 0s 160us/sample - loss: 0.0755
+Epoch 175/500
+12/12 [==============================] - 0s 189us/sample - loss: 0.0744
+Epoch 176/500
+12/12 [==============================] - 0s 272us/sample - loss: 0.0733
+Epoch 177/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0723
+Epoch 178/500
+12/12 [==============================] - 0s 211us/sample - loss: 0.0712
+Epoch 179/500
+12/12 [==============================] - 0s 213us/sample - loss: 0.0702
+Epoch 180/500
+12/12 [==============================] - 0s 143us/sample - loss: 0.0692
+Epoch 181/500
+12/12 [==============================] - 0s 224us/sample - loss: 0.0682
+Epoch 182/500
+12/12 [==============================] - 0s 177us/sample - loss: 0.0672
+Epoch 183/500
+12/12 [==============================] - 0s 164us/sample - loss: 0.0662
+Epoch 184/500
+12/12 [==============================] - 0s 286us/sample - loss: 0.0653
+Epoch 185/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0643
+Epoch 186/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0634
+Epoch 187/500
+12/12 [==============================] - 0s 225us/sample - loss: 0.0625
+Epoch 188/500
+12/12 [==============================] - 0s 242us/sample - loss: 0.0616
+Epoch 189/500
+12/12 [==============================] - 0s 126us/sample - loss: 0.0607
+Epoch 190/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0598
+Epoch 191/500
+12/12 [==============================] - 0s 241us/sample - loss: 0.0589
+Epoch 192/500
+12/12 [==============================] - 0s 155us/sample - loss: 0.0581
+Epoch 193/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0572
+Epoch 194/500
+12/12 [==============================] - 0s 145us/sample - loss: 0.0564
+Epoch 195/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.0556
+Epoch 196/500
+12/12 [==============================] - 0s 136us/sample - loss: 0.0548
+Epoch 197/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.0540
+Epoch 198/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.0532
+Epoch 199/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.0524
+Epoch 200/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.0517
+Epoch 201/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0509
+Epoch 202/500
+12/12 [==============================] - 0s 176us/sample - loss: 0.0502
+Epoch 203/500
+12/12 [==============================] - 0s 115us/sample - loss: 0.0495
+Epoch 204/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.0487
+Epoch 205/500
+12/12 [==============================] - 0s 149us/sample - loss: 0.0480
+Epoch 206/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.0473
+Epoch 207/500
+12/12 [==============================] - 0s 143us/sample - loss: 0.0467
+Epoch 208/500
+12/12 [==============================] - 0s 199us/sample - loss: 0.0460
+Epoch 209/500
+12/12 [==============================] - 0s 196us/sample - loss: 0.0453
+Epoch 210/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.0447
+Epoch 211/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.0440
+Epoch 212/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0434
+Epoch 213/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0428
+Epoch 214/500
+12/12 [==============================] - 0s 203us/sample - loss: 0.0421
+Epoch 215/500
+12/12 [==============================] - 0s 162us/sample - loss: 0.0415
+Epoch 216/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0409
+Epoch 217/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0403
+Epoch 218/500
+12/12 [==============================] - 0s 160us/sample - loss: 0.0397
+Epoch 219/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0392
+Epoch 220/500
+12/12 [==============================] - 0s 179us/sample - loss: 0.0386
+Epoch 221/500
+12/12 [==============================] - 0s 190us/sample - loss: 0.0380
+Epoch 222/500
+12/12 [==============================] - 0s 179us/sample - loss: 0.0375
+Epoch 223/500
+12/12 [==============================] - 0s 189us/sample - loss: 0.0370
+Epoch 224/500
+12/12 [==============================] - 0s 242us/sample - loss: 0.0364
+Epoch 225/500
+12/12 [==============================] - 0s 226us/sample - loss: 0.0359
+Epoch 226/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0354
+Epoch 227/500
+12/12 [==============================] - 0s 198us/sample - loss: 0.0349
+Epoch 228/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0344
+Epoch 229/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.0339
+Epoch 230/500
+12/12 [==============================] - 0s 145us/sample - loss: 0.0334
+Epoch 231/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.0329
+Epoch 232/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.0324
+Epoch 233/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.0319
+Epoch 234/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.0315
+Epoch 235/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0310
+Epoch 236/500
+12/12 [==============================] - 0s 204us/sample - loss: 0.0306
+Epoch 237/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.0301
+Epoch 238/500
+12/12 [==============================] - 0s 151us/sample - loss: 0.0297
+Epoch 239/500
+12/12 [==============================] - 0s 203us/sample - loss: 0.0293
+Epoch 240/500
+12/12 [==============================] - 0s 214us/sample - loss: 0.0288
+Epoch 241/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0284
+Epoch 242/500
+12/12 [==============================] - 0s 174us/sample - loss: 0.0280
+Epoch 243/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.0276
+Epoch 244/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0272
+Epoch 245/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0268
+Epoch 246/500
+12/12 [==============================] - 0s 152us/sample - loss: 0.0264
+Epoch 247/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.0260
+Epoch 248/500
+12/12 [==============================] - 0s 122us/sample - loss: 0.0257
+Epoch 249/500
+12/12 [==============================] - 0s 172us/sample - loss: 0.0253
+Epoch 250/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.0249
+Epoch 251/500
+12/12 [==============================] - 0s 143us/sample - loss: 0.0246
+Epoch 252/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0242
+Epoch 253/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0239
+Epoch 254/500
+12/12 [==============================] - 0s 166us/sample - loss: 0.0235
+Epoch 255/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0232
+Epoch 256/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0228
+Epoch 257/500
+12/12 [==============================] - 0s 255us/sample - loss: 0.0225
+Epoch 258/500
+12/12 [==============================] - 0s 190us/sample - loss: 0.0222
+Epoch 259/500
+12/12 [==============================] - 0s 212us/sample - loss: 0.0219
+Epoch 260/500
+12/12 [==============================] - 0s 254us/sample - loss: 0.0215
+Epoch 261/500
+12/12 [==============================] - 0s 259us/sample - loss: 0.0212
+Epoch 262/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.0209
+Epoch 263/500
+12/12 [==============================] - 0s 244us/sample - loss: 0.0206
+Epoch 264/500
+12/12 [==============================] - 0s 177us/sample - loss: 0.0203
+Epoch 265/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.0200
+Epoch 266/500
+12/12 [==============================] - 0s 221us/sample - loss: 0.0197
+Epoch 267/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.0195
+Epoch 268/500
+12/12 [==============================] - 0s 271us/sample - loss: 0.0192
+Epoch 269/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0189
+Epoch 270/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0186
+Epoch 271/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0183
+Epoch 272/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.0181
+Epoch 273/500
+12/12 [==============================] - 0s 118us/sample - loss: 0.0178
+Epoch 274/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0176
+Epoch 275/500
+12/12 [==============================] - 0s 198us/sample - loss: 0.0173
+Epoch 276/500
+12/12 [==============================] - 0s 221us/sample - loss: 0.0171
+Epoch 277/500
+12/12 [==============================] - 0s 122us/sample - loss: 0.0168
+Epoch 278/500
+12/12 [==============================] - 0s 108us/sample - loss: 0.0166
+Epoch 279/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.0163
+Epoch 280/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.0161
+Epoch 281/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0159
+Epoch 282/500
+12/12 [==============================] - 0s 153us/sample - loss: 0.0156
+Epoch 283/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.0154
+Epoch 284/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.0152
+Epoch 285/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.0150
+Epoch 286/500
+12/12 [==============================] - 0s 150us/sample - loss: 0.0147
+Epoch 287/500
+12/12 [==============================] - 0s 150us/sample - loss: 0.0145
+Epoch 288/500
+12/12 [==============================] - 0s 155us/sample - loss: 0.0143
+Epoch 289/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0141
+Epoch 290/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.0139
+Epoch 291/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0137
+Epoch 292/500
+12/12 [==============================] - 0s 159us/sample - loss: 0.0135
+Epoch 293/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0133
+Epoch 294/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0131
+Epoch 295/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0129
+Epoch 296/500
+12/12 [==============================] - 0s 135us/sample - loss: 0.0127
+Epoch 297/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0126
+Epoch 298/500
+12/12 [==============================] - 0s 199us/sample - loss: 0.0124
+Epoch 299/500
+12/12 [==============================] - 0s 175us/sample - loss: 0.0122
+Epoch 300/500
+12/12 [==============================] - 0s 152us/sample - loss: 0.0120
+Epoch 301/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.0118
+Epoch 302/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0117
+Epoch 303/500
+12/12 [==============================] - 0s 178us/sample - loss: 0.0115
+Epoch 304/500
+12/12 [==============================] - 0s 124us/sample - loss: 0.0113
+Epoch 305/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0112
+Epoch 306/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0110
+Epoch 307/500
+12/12 [==============================] - 0s 123us/sample - loss: 0.0109
+Epoch 308/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0107
+Epoch 309/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0105
+Epoch 310/500
+12/12 [==============================] - 0s 178us/sample - loss: 0.0104
+Epoch 311/500
+12/12 [==============================] - 0s 180us/sample - loss: 0.0102
+Epoch 312/500
+12/12 [==============================] - 0s 137us/sample - loss: 0.0101
+Epoch 313/500
+12/12 [==============================] - 0s 173us/sample - loss: 0.0099
+Epoch 314/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.0098
+Epoch 315/500
+12/12 [==============================] - 0s 165us/sample - loss: 0.0097
+Epoch 316/500
+12/12 [==============================] - 0s 183us/sample - loss: 0.0095
+Epoch 317/500
+12/12 [==============================] - 0s 168us/sample - loss: 0.0094
+Epoch 318/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.0092
+Epoch 319/500
+12/12 [==============================] - 0s 199us/sample - loss: 0.0091
+Epoch 320/500
+12/12 [==============================] - 0s 187us/sample - loss: 0.0090
+Epoch 321/500
+12/12 [==============================] - 0s 175us/sample - loss: 0.0088
+Epoch 322/500
+12/12 [==============================] - 0s 149us/sample - loss: 0.0087
+Epoch 323/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0086
+Epoch 324/500
+12/12 [==============================] - 0s 258us/sample - loss: 0.0085
+Epoch 325/500
+12/12 [==============================] - 0s 227us/sample - loss: 0.0083
+Epoch 326/500
+12/12 [==============================] - 0s 252us/sample - loss: 0.0082
+Epoch 327/500
+12/12 [==============================] - 0s 215us/sample - loss: 0.0081
+Epoch 328/500
+12/12 [==============================] - 0s 249us/sample - loss: 0.0080
+Epoch 329/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.0079
+Epoch 330/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.0078
+Epoch 331/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.0076
+Epoch 332/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.0075
+Epoch 333/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0074
+Epoch 334/500
+12/12 [==============================] - 0s 216us/sample - loss: 0.0073
+Epoch 335/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.0072
+Epoch 336/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0071
+Epoch 337/500
+12/12 [==============================] - 0s 159us/sample - loss: 0.0070
+Epoch 338/500
+12/12 [==============================] - 0s 143us/sample - loss: 0.0069
+Epoch 339/500
+12/12 [==============================] - 0s 214us/sample - loss: 0.0068
+Epoch 340/500
+12/12 [==============================] - 0s 211us/sample - loss: 0.0067
+Epoch 341/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0066
+Epoch 342/500
+12/12 [==============================] - 0s 164us/sample - loss: 0.0065
+Epoch 343/500
+12/12 [==============================] - 0s 235us/sample - loss: 0.0064
+Epoch 344/500
+12/12 [==============================] - 0s 223us/sample - loss: 0.0063
+Epoch 345/500
+12/12 [==============================] - 0s 180us/sample - loss: 0.0062
+Epoch 346/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.0061
+Epoch 347/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.0061
+Epoch 348/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0060
+Epoch 349/500
+12/12 [==============================] - 0s 179us/sample - loss: 0.0059
+Epoch 350/500
+12/12 [==============================] - 0s 163us/sample - loss: 0.0058
+Epoch 351/500
+12/12 [==============================] - 0s 173us/sample - loss: 0.0057
+Epoch 352/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.0056
+Epoch 353/500
+12/12 [==============================] - 0s 206us/sample - loss: 0.0055
+Epoch 354/500
+12/12 [==============================] - 0s 178us/sample - loss: 0.0055
+Epoch 355/500
+12/12 [==============================] - 0s 115us/sample - loss: 0.0054
+Epoch 356/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.0053
+Epoch 357/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0052
+Epoch 358/500
+12/12 [==============================] - 0s 220us/sample - loss: 0.0052
+Epoch 359/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0051
+Epoch 360/500
+12/12 [==============================] - 0s 129us/sample - loss: 0.0050
+Epoch 361/500
+12/12 [==============================] - 0s 219us/sample - loss: 0.0049
+Epoch 362/500
+12/12 [==============================] - 0s 161us/sample - loss: 0.0049
+Epoch 363/500
+12/12 [==============================] - 0s 113us/sample - loss: 0.0048
+Epoch 364/500
+12/12 [==============================] - 0s 110us/sample - loss: 0.0047
+Epoch 365/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0047
+Epoch 366/500
+12/12 [==============================] - 0s 196us/sample - loss: 0.0046
+Epoch 367/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0045
+Epoch 368/500
+12/12 [==============================] - 0s 193us/sample - loss: 0.0045
+Epoch 369/500
+12/12 [==============================] - 0s 174us/sample - loss: 0.0044
+Epoch 370/500
+12/12 [==============================] - 0s 141us/sample - loss: 0.0043
+Epoch 371/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0043
+Epoch 372/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.0042
+Epoch 373/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0041
+Epoch 374/500
+12/12 [==============================] - 0s 136us/sample - loss: 0.0041
+Epoch 375/500
+12/12 [==============================] - 0s 147us/sample - loss: 0.0040
+Epoch 376/500
+12/12 [==============================] - 0s 186us/sample - loss: 0.0040
+Epoch 377/500
+12/12 [==============================] - 0s 149us/sample - loss: 0.0039
+Epoch 378/500
+12/12 [==============================] - 0s 178us/sample - loss: 0.0039
+Epoch 379/500
+12/12 [==============================] - 0s 134us/sample - loss: 0.0038
+Epoch 380/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.0037
+Epoch 381/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0037
+Epoch 382/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.0036
+Epoch 383/500
+12/12 [==============================] - 0s 179us/sample - loss: 0.0036
+Epoch 384/500
+12/12 [==============================] - 0s 236us/sample - loss: 0.0035
+Epoch 385/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.0035
+Epoch 386/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0034
+Epoch 387/500
+12/12 [==============================] - 0s 163us/sample - loss: 0.0034
+Epoch 388/500
+12/12 [==============================] - 0s 192us/sample - loss: 0.0033
+Epoch 389/500
+12/12 [==============================] - 0s 222us/sample - loss: 0.0033
+Epoch 390/500
+12/12 [==============================] - 0s 209us/sample - loss: 0.0032
+Epoch 391/500
+12/12 [==============================] - 0s 208us/sample - loss: 0.0032
+Epoch 392/500
+12/12 [==============================] - 0s 152us/sample - loss: 0.0031
+Epoch 393/500
+12/12 [==============================] - 0s 146us/sample - loss: 0.0031
+Epoch 394/500
+12/12 [==============================] - 0s 167us/sample - loss: 0.0031
+Epoch 395/500
+12/12 [==============================] - 0s 124us/sample - loss: 0.0030
+Epoch 396/500
+12/12 [==============================] - 0s 219us/sample - loss: 0.0030
+Epoch 397/500
+12/12 [==============================] - 0s 138us/sample - loss: 0.0029
+Epoch 398/500
+12/12 [==============================] - 0s 119us/sample - loss: 0.0029
+Epoch 399/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.0028
+Epoch 400/500
+12/12 [==============================] - 0s 145us/sample - loss: 0.0028
+Epoch 401/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.0028
+Epoch 402/500
+12/12 [==============================] - 0s 111us/sample - loss: 0.0027
+Epoch 403/500
+12/12 [==============================] - 0s 112us/sample - loss: 0.0027
+Epoch 404/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0026
+Epoch 405/500
+12/12 [==============================] - 0s 159us/sample - loss: 0.0026
+Epoch 406/500
+12/12 [==============================] - 0s 104us/sample - loss: 0.0026
+Epoch 407/500
+12/12 [==============================] - 0s 186us/sample - loss: 0.0025
+Epoch 408/500
+12/12 [==============================] - 0s 151us/sample - loss: 0.0025
+Epoch 409/500
+12/12 [==============================] - 0s 165us/sample - loss: 0.0025
+Epoch 410/500
+12/12 [==============================] - 0s 128us/sample - loss: 0.0024
+Epoch 411/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.0024
+Epoch 412/500
+12/12 [==============================] - 0s 148us/sample - loss: 0.0023
+Epoch 413/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0023
+Epoch 414/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0023
+Epoch 415/500
+12/12 [==============================] - 0s 159us/sample - loss: 0.0022
+Epoch 416/500
+12/12 [==============================] - 0s 158us/sample - loss: 0.0022
+Epoch 417/500
+12/12 [==============================] - 0s 124us/sample - loss: 0.0022
+Epoch 418/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0022
+Epoch 419/500
+12/12 [==============================] - 0s 140us/sample - loss: 0.0021
+Epoch 420/500
+12/12 [==============================] - 0s 131us/sample - loss: 0.0021
+Epoch 421/500
+12/12 [==============================] - 0s 130us/sample - loss: 0.0021
+Epoch 422/500
+12/12 [==============================] - 0s 117us/sample - loss: 0.0020
+Epoch 423/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0020
+Epoch 424/500
+12/12 [==============================] - 0s 215us/sample - loss: 0.0020
+Epoch 425/500
+12/12 [==============================] - 0s 150us/sample - loss: 0.0019
+Epoch 426/500
+12/12 [==============================] - 0s 133us/sample - loss: 0.0019
+Epoch 427/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0019
+Epoch 428/500
+12/12 [==============================] - 0s 175us/sample - loss: 0.0019
+Epoch 429/500
+12/12 [==============================] - 0s 185us/sample - loss: 0.0018
+Epoch 430/500
+12/12 [==============================] - 0s 186us/sample - loss: 0.0018
+Epoch 431/500
+12/12 [==============================] - 0s 196us/sample - loss: 0.0018
+Epoch 432/500
+12/12 [==============================] - 0s 134us/sample - loss: 0.0018
+Epoch 433/500
+12/12 [==============================] - 0s 180us/sample - loss: 0.0017
+Epoch 434/500
+12/12 [==============================] - 0s 234us/sample - loss: 0.0017
+Epoch 435/500
+12/12 [==============================] - 0s 184us/sample - loss: 0.0017
+Epoch 436/500
+12/12 [==============================] - 0s 226us/sample - loss: 0.0017
+Epoch 437/500
+12/12 [==============================] - 0s 267us/sample - loss: 0.0016
+Epoch 438/500
+12/12 [==============================] - 0s 120us/sample - loss: 0.0016
+Epoch 439/500
+12/12 [==============================] - 0s 132us/sample - loss: 0.0016
+Epoch 440/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0016
+Epoch 441/500
+12/12 [==============================] - 0s 151us/sample - loss: 0.0015
+Epoch 442/500
+12/12 [==============================] - 0s 191us/sample - loss: 0.0015
+Epoch 443/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0015
+Epoch 444/500
+12/12 [==============================] - 0s 205us/sample - loss: 0.0015
+Epoch 445/500
+12/12 [==============================] - 0s 219us/sample - loss: 0.0015
+Epoch 446/500
+12/12 [==============================] - 0s 121us/sample - loss: 0.0014
+Epoch 447/500
+12/12 [==============================] - 0s 238us/sample - loss: 0.0014
+Epoch 448/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0014
+Epoch 449/500
+12/12 [==============================] - 0s 163us/sample - loss: 0.0014
+Epoch 450/500
+12/12 [==============================] - 0s 161us/sample - loss: 0.0013
+Epoch 451/500
+12/12 [==============================] - 0s 146us/sample - loss: 0.0013
+Epoch 452/500
+12/12 [==============================] - 0s 240us/sample - loss: 0.0013
+Epoch 453/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0013
+Epoch 454/500
+12/12 [==============================] - 0s 139us/sample - loss: 0.0013
+Epoch 455/500
+12/12 [==============================] - 0s 154us/sample - loss: 0.0013
+Epoch 456/500
+12/12 [==============================] - 0s 191us/sample - loss: 0.0012
+Epoch 457/500
+12/12 [==============================] - 0s 144us/sample - loss: 0.0012
+Epoch 458/500
+12/12 [==============================] - 0s 200us/sample - loss: 0.0012
+Epoch 459/500
+12/12 [==============================] - 0s 116us/sample - loss: 0.0012
+Epoch 460/500
+12/12 [==============================] - 0s 127us/sample - loss: 0.0012
+Epoch 461/500
+12/12 [==============================] - 0s 106us/sample - loss: 0.0011
+Epoch 462/500
+12/12 [==============================] - 0s 157us/sample - loss: 0.0011
+Epoch 463/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0011
+Epoch 464/500
+12/12 [==============================] - 0s 156us/sample - loss: 0.0011
+Epoch 465/500
+12/12 [==============================] - 0s 125us/sample - loss: 0.0011
+Epoch 466/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0011
+Epoch 467/500
+12/12 [==============================] - 0s 142us/sample - loss: 0.0011
+Epoch 468/500
+12/12 [==============================] - 0s 182us/sample - loss: 0.0010
+Epoch 469/500
+12/12 [==============================] - 0s 168us/sample - loss: 0.0010
+Epoch 470/500
+12/12 [==============================] - 0s 170us/sample - loss: 0.0010
+Epoch 471/500
+12/12 [==============================] - 0s 155us/sample - loss: 9.9278e-04
+Epoch 472/500
+12/12 [==============================] - 0s 156us/sample - loss: 9.7837e-04
+Epoch 473/500
+12/12 [==============================] - 0s 183us/sample - loss: 9.6420e-04
+Epoch 474/500
+12/12 [==============================] - 0s 190us/sample - loss: 9.5020e-04
+Epoch 475/500
+12/12 [==============================] - 0s 145us/sample - loss: 9.3651e-04
+Epoch 476/500
+12/12 [==============================] - 0s 132us/sample - loss: 9.2296e-04
+Epoch 477/500
+12/12 [==============================] - 0s 117us/sample - loss: 9.0959e-04
+Epoch 478/500
+12/12 [==============================] - 0s 140us/sample - loss: 8.9637e-04
+Epoch 479/500
+12/12 [==============================] - 0s 155us/sample - loss: 8.8343e-04
+Epoch 480/500
+12/12 [==============================] - 0s 142us/sample - loss: 8.7067e-04
+Epoch 481/500
+12/12 [==============================] - 0s 188us/sample - loss: 8.5804e-04
+Epoch 482/500
+12/12 [==============================] - 0s 162us/sample - loss: 8.4565e-04
+Epoch 483/500
+12/12 [==============================] - 0s 138us/sample - loss: 8.3338e-04
+Epoch 484/500
+12/12 [==============================] - 0s 166us/sample - loss: 8.2129e-04
+Epoch 485/500
+12/12 [==============================] - 0s 166us/sample - loss: 8.0942e-04
+Epoch 486/500
+12/12 [==============================] - 0s 218us/sample - loss: 7.9771e-04
+Epoch 487/500
+12/12 [==============================] - 0s 116us/sample - loss: 7.8613e-04
+Epoch 488/500
+12/12 [==============================] - 0s 185us/sample - loss: 7.7477e-04
+Epoch 489/500
+12/12 [==============================] - 0s 205us/sample - loss: 7.6356e-04
+Epoch 490/500
+12/12 [==============================] - 0s 201us/sample - loss: 7.5247e-04
+Epoch 491/500
+12/12 [==============================] - 0s 174us/sample - loss: 7.4156e-04
+Epoch 492/500
+12/12 [==============================] - 0s 196us/sample - loss: 7.3085e-04
+Epoch 493/500
+12/12 [==============================] - 0s 132us/sample - loss: 7.2026e-04
+Epoch 494/500
+12/12 [==============================] - 0s 181us/sample - loss: 7.0985e-04
+Epoch 495/500
+12/12 [==============================] - 0s 136us/sample - loss: 6.9957e-04
+Epoch 496/500
+12/12 [==============================] - 0s 206us/sample - loss: 6.8942e-04
+Epoch 497/500
+12/12 [==============================] - 0s 141us/sample - loss: 6.7942e-04
+Epoch 498/500
+12/12 [==============================] - 0s 159us/sample - loss: 6.6961e-04
+Epoch 499/500
+12/12 [==============================] - 0s 155us/sample - loss: 6.5995e-04
+Epoch 500/500
+12/12 [==============================] - 0s 194us/sample - loss: 6.5038e-04
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;tensorflow.python.keras.callbacks.History at 0x7f1ab44e1f50&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="One-can-see-that-as-we-started-training-our-model,-it-made-a-very-poor-guess-at-the-first-epoch---loss-value-is-huge.-After-few-epochs,-we-see-that-the-loss-starts-to-go-down-and-by-the-end-of-500-epochs,-loss-is-almost-zero-!">One can see that as we started training our model, it made a very poor guess at the first epoch - loss value is huge. After few epochs, we see that the loss starts to go down and by the end of 500 epochs, loss is almost zero !<a class="anchor-link" href="#One-can-see-that-as-we-started-training-our-model,-it-made-a-very-poor-guess-at-the-first-epoch---loss-value-is-huge.-After-few-epochs,-we-see-that-the-loss-starts-to-go-down-and-by-the-end-of-500-epochs,-loss-is-almost-zero-!"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="So-now-we-have-a-model-that-is-trained-to-learn-the-relationship-between-X-and-Y.-Let's-try-to-predict-the-value-of-X-which-the-model-have-not-seen-before">So now we have a model that is trained to learn the relationship between X and Y. Let's try to predict the value of X which the model have not seen before<a class="anchor-link" href="#So-now-we-have-a-model-that-is-trained-to-learn-the-relationship-between-X-and-Y.-Let's-try-to-predict-the-value-of-X-which-the-model-have-not-seen-before"> </a></h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="mf">25.0</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[[249.89447]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="We-were-expecting-Y-to-be-250-but-out-NN-gave-us-the-value-closeby-to-250.-This-is-because-NN-deals-with-probabilities.-With-only-12-data-points,-our-model-calculated-that-there-is-a-very-high-probability-that-the-relationship-between-X-and-Y-is-Y-=-10X.-As-a-result,-the-prediction-for-25-is-very-close-to-250-but-not-exactly-250.">We were expecting Y to be 250 but out NN gave us the value closeby to 250. This is because NN deals with probabilities. With only 12 data points, our model calculated that there is a very high probability that the relationship between X and Y is Y = 10X. As a result, the prediction for 25 is very close to 250 but not exactly 250.<a class="anchor-link" href="#We-were-expecting-Y-to-be-250-but-out-NN-gave-us-the-value-closeby-to-250.-This-is-because-NN-deals-with-probabilities.-With-only-12-data-points,-our-model-calculated-that-there-is-a-very-high-probability-that-the-relationship-between-X-and-Y-is-Y-=-10X.-As-a-result,-the-prediction-for-25-is-very-close-to-250-but-not-exactly-250."> </a></h4><h4 id="Feel-free-to-write-in-the-comments-if-you-have-any-suggestions-and-comments.-Thanks-!">Feel free to write in the comments if you have any suggestions and comments. Thanks !<a class="anchor-link" href="#Feel-free-to-write-in-the-comments-if-you-have-any-suggestions-and-comments.-Thanks-!"> </a></h4>
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="aizardar/blogs"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blogs/neural%20networks/keras/linear%20regression/2020/10/09/hello-world-neural-networks.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Welcome to my blog page!</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/aizardar" title="aizardar"><svg class="svg-icon grey"><use xlink:href="/blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/https%3A%2F%2Ftwitter.com%2FIzardarAnkit" title="https://twitter.com/IzardarAnkit"><svg class="svg-icon grey"><use xlink:href="/blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
