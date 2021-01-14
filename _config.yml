@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: Izardar's blog
-description: 'If you can't explain it simply, you don't understand it well enough.' \- A.Einstein
+description: 'If you can't explain it simply, you don't understand it well enough.' A.Einstein
 github_username: aizardar
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "blogs"
